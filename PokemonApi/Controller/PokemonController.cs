@@ -1,6 +1,4 @@
-﻿using PokemonApi.Model;
-using PokemonApi.Service;
-using System.Text.RegularExpressions;
+﻿using System.Text.RegularExpressions;
 
 namespace PokemonApi.Controller
 {
@@ -21,9 +19,65 @@ namespace PokemonApi.Controller
                 }
             }
 
+            if (nome.Length < 5)
+            {
+                Console.WriteLine("O nome de treinador(a) deve conter mais que 5 caracteres!");
+                
+                while (nome.Length < 5)
+                {
+                    Console.Write("\nDigite novamente: ");
+                    nome = Console.ReadLine();
+                }
+            }
+
             Console.WriteLine($"\nSeja bem vindo(a), treinador(a) {nome}!");
 
             return nome;
+        }
+
+        public int ValidaOpcoes(string opcao)
+        {
+            int opcaoDesejada = 0;
+            bool isValid = false;
+            
+
+            while (!isValid)
+            {
+                if (int.TryParse(opcao, out opcaoDesejada))
+                {
+                    isValid = true;
+
+                    return opcaoDesejada;
+                }
+
+                Console.Write("\nA opção digitada não é um número, tente novamente! ");
+                opcao = Console.ReadLine();
+
+                return ValidaOpcoes(opcao);
+            }
+
+            return opcaoDesejada;
+        }
+
+        public string ValidaEscolha(char escolha)
+        { 
+            if (escolha.ToString().ToLower() == "y")
+            {
+                return escolha.ToString().ToLower();
+            }
+            else if (escolha.ToString().ToLower() == "n")
+            {
+                return escolha.ToString().ToLower();
+            }
+            else
+            {
+                Console.WriteLine($"\nA escolha pode ser apenas {"y"} ou {"n"}!");
+                
+                Console.Write("Digite novamente: ");
+                char novaEscolha = Console.ReadLine()[0];
+
+                return ValidaEscolha(novaEscolha);
+            }
         }
 
         public string ToCapitalize(string word)

@@ -19,7 +19,9 @@ namespace PokemonApi.View
             treinador.Name = _controller.ValidaNomeTreinador(treinador.Name);
 
             ImprimeOpcoesInicial();
-            int opcaoInicial = int.Parse(Console.ReadLine());
+            string opcaoInicial = Console.ReadLine();
+            _controller.ValidaOpcoes(opcaoInicial);
+            
             OpcoesIncial(opcaoInicial, treinador);
         }
 
@@ -67,21 +69,26 @@ namespace PokemonApi.View
             Console.WriteLine("  ■■■■■■■  ");
         }
 
-        public void OpcoesIncial(int opcoes, Treinador treinador)
+        public void OpcoesIncial(string opcoes, Treinador treinador)
         {
-            switch (opcoes)
+            int opcaoDesejada = _controller.ValidaOpcoes(opcoes);
+
+            switch (opcaoDesejada)
             {
                 case 1:
                     Console.WriteLine("\n1 - Escolher o Pokemon");
                     Console.WriteLine("2 - Voltar");
 
                     Console.Write("\nEscolha uma das opções acima: ");
-                    opcoes = int.Parse(Console.ReadLine());
+                    opcoes = Console.ReadLine();
+                    _controller.ValidaOpcoes(opcoes);
 
                     OpcoesAdocao(opcoes, treinador);
 
                     break;
                 case 2:
+                    string opcaoValidada = "";
+
                     if (treinador.Pokemons.Count > 0)
                     {
                         Console.WriteLine("\nLista de Pokemons adotados:");
@@ -94,28 +101,37 @@ namespace PokemonApi.View
                         Console.Write("\nDeseja fazer algo a mais? (y/n): ");
                         char opcaoDetalhes = Console.ReadLine()[0];
 
-                        if (opcaoDetalhes.ToString().ToLower() == "y")
+                        opcaoValidada = _controller.ValidaEscolha(opcaoDetalhes);
+
+                        if (opcaoValidada == "y")
                         {
                             ImprimeOpcoesInicial();
 
-                            opcoes = int.Parse(Console.ReadLine());
+                            opcoes = Console.ReadLine();
+                            _controller.ValidaOpcoes(opcoes);
+
                             OpcoesIncial(opcoes, treinador);
                         }
                         else
                         {
                             ImprimeOvoPokemon();
                         }
+
                         break;
                     }
 
                     Console.WriteLine("\nVocê ainda não tem nenhum Pokemon adotado. Gostaria de adotar? (y/n): ");
                     char opcaoAdocao = Console.ReadLine()[0];
 
-                    if (opcaoAdocao.ToString().ToLower() == "y")
+                    opcaoValidada = _controller.ValidaEscolha(opcaoAdocao);
+
+                    if (opcaoValidada == "y")
                     {
                         ImprimeOpcoesInicial();
 
-                        opcoes = int.Parse(Console.ReadLine());
+                        opcoes = Console.ReadLine();
+                        _controller.ValidaOpcoes(opcoes);
+
                         OpcoesIncial(opcoes, treinador);
 
                         break;
@@ -132,23 +148,27 @@ namespace PokemonApi.View
                 default:
                     Console.Write("\nOpção inválida! Digite novamente: ");
 
-                    opcoes = int.Parse(Console.ReadLine());
+                    opcoes = Console.ReadLine();
+                    _controller.ValidaOpcoes(opcoes);
+
                     OpcoesIncial(opcoes, treinador);
 
                     break;
             }
         }
 
-        public void OpcoesAdocao(int opcoes, Treinador treinador)
+        public void OpcoesAdocao(string opcoes, Treinador treinador)
         {
-            switch (opcoes)
+            int opcaoDesejada = _controller.ValidaOpcoes(opcoes);
+
+            switch (opcaoDesejada)
             {
                 case 1:
                     Console.Write("\nDigite o nome do Pokemon que deseja adotar: ");
                     string pokemonName = Console.ReadLine().ToLower();
 
                     Pokemon pokemonInfo = _service.GetPokemonResponse(pokemonName);
-                    treinador.Pokemons.Add(pokemonName);
+                    treinador.Pokemons.Add(pokemonInfo.name);
 
                     Console.Write($"\nMuito bem, treinador(a) {treinador.Name}! Deseja conhecer mais sobre este Pokemon? (y/n): ");
                     char opcaoDetalhes = Console.ReadLine()[0];
@@ -161,11 +181,15 @@ namespace PokemonApi.View
                     Console.Write("\nDeseja fazer algo a mais? (y/n): ");
                     opcaoDetalhes = Console.ReadLine()[0];
 
-                    if (opcaoDetalhes.ToString().ToLower() == "y")
+                    string opcaoValidada = _controller.ValidaEscolha(opcaoDetalhes);
+
+                    if (opcaoValidada == "y")
                     {
                         ImprimeOpcoesInicial();
 
-                        opcoes = int.Parse(Console.ReadLine());
+                        opcoes = Console.ReadLine();
+                        _controller.ValidaOpcoes(opcoes);
+
                         OpcoesIncial(opcoes, treinador);
                     }
                     else
@@ -177,14 +201,18 @@ namespace PokemonApi.View
                 case 2:
                     ImprimeOpcoesInicial();
 
-                    opcoes = int.Parse(Console.ReadLine());
+                    opcoes = Console.ReadLine();
+                    _controller.ValidaOpcoes(opcoes);
+
                     OpcoesIncial(opcoes, treinador);
 
                     break;
                 default:
                     Console.Write("\nOpção inválida! Digite novamente: ");
 
-                    opcoes = int.Parse(Console.ReadLine());
+                    opcoes = Console.ReadLine();
+                    _controller.ValidaOpcoes(opcoes);
+
                     OpcoesIncial(opcoes, treinador);
 
                     break;

@@ -1,4 +1,5 @@
-﻿using PokemonApi.Model;
+﻿using PokemonApi.Controller;
+using PokemonApi.Model;
 using RestSharp;
 using System.Text.Json;
 
@@ -6,6 +7,8 @@ namespace PokemonApi.Service
 {
     public class PokemonService
     {
+        private readonly PokemonController _controller = new();
+
         public Pokemon GetPokemonResponse(string pokemonName)
         {
             const string baseUrl = "https://pokeapi.co/api/v2/pokemon/";
@@ -17,10 +20,12 @@ namespace PokemonApi.Service
             if (response.StatusCode == System.Net.HttpStatusCode.NotFound)
             {
                 Console.WriteLine("\nPokemon não encontrado!");
-                Console.Write("Gostaria de procurar novamente? (y/n) ");
+                Console.Write("Gostaria de procurar novamente? (y/n): ");
                 char option = Console.ReadLine()[0];
 
-                if (option.ToString().ToLower() == "n")
+                string opcaoValidada = _controller.ValidaEscolha(option);
+
+                if (opcaoValidada == "n")
                 {
                     Console.WriteLine("\nEncerrando programa!");
                     Environment.Exit(0);
